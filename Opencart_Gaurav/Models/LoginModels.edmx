@@ -1,0 +1,568 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Database1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CartMaster">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="refAdminId" Type="int" Nullable="false" />
+          <Property Name="refProductId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="refUserId" Type="int" Nullable="false" />
+          <Property Name="OrderProcessed" Type="bit" />
+        </EntityType>
+        <EntityType Name="CategoryMaster">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CityMaster">
+          <Key>
+            <PropertyRef Name="CityId" />
+          </Key>
+          <Property Name="CityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CityName" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="RefStateId" Type="int" />
+        </EntityType>
+        <EntityType Name="CountryMaster">
+          <Key>
+            <PropertyRef Name="CountryId" />
+          </Key>
+          <Property Name="CountryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MastersLogin">
+          <Key>
+            <PropertyRef Name="AdminId" />
+          </Key>
+          <Property Name="AdminId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdminName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdminEmailId" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductMaster">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="RefSubCategoryId" Type="int" />
+          <Property Name="price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="ProductImage" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StateMaster">
+          <Key>
+            <PropertyRef Name="StateId" />
+          </Key>
+          <Property Name="StateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StateName" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="RefCountryId" Type="int" />
+        </EntityType>
+        <EntityType Name="SubCategoryMaster">
+          <Key>
+            <PropertyRef Name="SubCategoryId" />
+          </Key>
+          <Property Name="SubCategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubCategoryName" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="RefCategoryId" Type="int" />
+        </EntityType>
+        <EntityType Name="UserMaster">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userFirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserMiddleName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserLastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserPassword" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserImageUrl" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserAdd" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserEmailId" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserGender" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="refCityId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__CartMaste__refPr__03F0984C">
+          <End Role="ProductMaster" Type="Self.ProductMaster" Multiplicity="1" />
+          <End Role="CartMaster" Type="Self.CartMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductMaster">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="CartMaster">
+              <PropertyRef Name="refProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CartMaste__refUs__18EBB532">
+          <End Role="UserMaster" Type="Self.UserMaster" Multiplicity="1" />
+          <End Role="CartMaster" Type="Self.CartMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserMaster">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="CartMaster">
+              <PropertyRef Name="refUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CityMaste__RefSt__6E01572D">
+          <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="0..1" />
+          <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StateMaster">
+              <PropertyRef Name="StateId" />
+            </Principal>
+            <Dependent Role="CityMaster">
+              <PropertyRef Name="RefStateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductMa__RefSu__6383C8BA">
+          <End Role="SubCategoryMaster" Type="Self.SubCategoryMaster" Multiplicity="0..1" />
+          <End Role="ProductMaster" Type="Self.ProductMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubCategoryMaster">
+              <PropertyRef Name="SubCategoryId" />
+            </Principal>
+            <Dependent Role="ProductMaster">
+              <PropertyRef Name="RefSubCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StateMast__RefCo__6A30C649">
+          <End Role="CountryMaster" Type="Self.CountryMaster" Multiplicity="0..1" />
+          <End Role="StateMaster" Type="Self.StateMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CountryMaster">
+              <PropertyRef Name="CountryId" />
+            </Principal>
+            <Dependent Role="StateMaster">
+              <PropertyRef Name="RefCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SubCatego__RefCa__60A75C0F">
+          <End Role="CategoryMaster" Type="Self.CategoryMaster" Multiplicity="0..1" />
+          <End Role="SubCategoryMaster" Type="Self.SubCategoryMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoryMaster">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="SubCategoryMaster">
+              <PropertyRef Name="RefCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserMaste__refCi__17F790F9">
+          <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="1" />
+          <End Role="UserMaster" Type="Self.UserMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CityMaster">
+              <PropertyRef Name="CityId" />
+            </Principal>
+            <Dependent Role="UserMaster">
+              <PropertyRef Name="refCityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database1ModelStoreContainer">
+          <EntitySet Name="CartMaster" EntityType="Self.CartMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CategoryMaster" EntityType="Self.CategoryMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CityMaster" EntityType="Self.CityMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CountryMaster" EntityType="Self.CountryMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MastersLogin" EntityType="Self.MastersLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductMaster" EntityType="Self.ProductMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StateMaster" EntityType="Self.StateMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubCategoryMaster" EntityType="Self.SubCategoryMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserMaster" EntityType="Self.UserMaster" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__CartMaste__refPr__03F0984C" Association="Self.FK__CartMaste__refPr__03F0984C">
+            <End Role="ProductMaster" EntitySet="ProductMaster" />
+            <End Role="CartMaster" EntitySet="CartMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CartMaste__refUs__18EBB532" Association="Self.FK__CartMaste__refUs__18EBB532">
+            <End Role="UserMaster" EntitySet="UserMaster" />
+            <End Role="CartMaster" EntitySet="CartMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CityMaste__RefSt__6E01572D" Association="Self.FK__CityMaste__RefSt__6E01572D">
+            <End Role="StateMaster" EntitySet="StateMaster" />
+            <End Role="CityMaster" EntitySet="CityMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductMa__RefSu__6383C8BA" Association="Self.FK__ProductMa__RefSu__6383C8BA">
+            <End Role="SubCategoryMaster" EntitySet="SubCategoryMaster" />
+            <End Role="ProductMaster" EntitySet="ProductMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StateMast__RefCo__6A30C649" Association="Self.FK__StateMast__RefCo__6A30C649">
+            <End Role="CountryMaster" EntitySet="CountryMaster" />
+            <End Role="StateMaster" EntitySet="StateMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SubCatego__RefCa__60A75C0F" Association="Self.FK__SubCatego__RefCa__60A75C0F">
+            <End Role="CategoryMaster" EntitySet="CategoryMaster" />
+            <End Role="SubCategoryMaster" EntitySet="SubCategoryMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserMaste__refCi__17F790F9" Association="Self.FK__UserMaste__refCi__17F790F9">
+            <End Role="CityMaster" EntitySet="CityMaster" />
+            <End Role="UserMaster" EntitySet="UserMaster" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Database1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="MastersLogin">
+          <Key>
+            <PropertyRef Name="AdminId" />
+          </Key>
+          <Property Name="AdminId" Type="Int32" Nullable="false" />
+          <Property Name="AdminName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AdminEmailId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="Database1Entities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MastersLogins" EntityType="Self.MastersLogin" />
+          <EntitySet Name="CategoryMasters" EntityType="Database1Model.CategoryMaster" />
+          <EntitySet Name="CityMasters" EntityType="Database1Model.CityMaster" />
+          <EntitySet Name="CountryMasters" EntityType="Database1Model.CountryMaster" />
+          <EntitySet Name="ProductMasters" EntityType="Database1Model.ProductMaster" />
+          <EntitySet Name="StateMasters" EntityType="Database1Model.StateMaster" />
+          <EntitySet Name="SubCategoryMasters" EntityType="Database1Model.SubCategoryMaster" />
+          <AssociationSet Name="FK__SubCatego__RefCa__60A75C0F" Association="Database1Model.FK__SubCatego__RefCa__60A75C0F">
+            <End Role="CategoryMaster" EntitySet="CategoryMasters" />
+            <End Role="SubCategoryMaster" EntitySet="SubCategoryMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CityMaste__RefSt__6E01572D" Association="Database1Model.FK__CityMaste__RefSt__6E01572D">
+            <End Role="StateMaster" EntitySet="StateMasters" />
+            <End Role="CityMaster" EntitySet="CityMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StateMast__RefCo__6A30C649" Association="Database1Model.FK__StateMast__RefCo__6A30C649">
+            <End Role="CountryMaster" EntitySet="CountryMasters" />
+            <End Role="StateMaster" EntitySet="StateMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductMa__RefSu__6383C8BA" Association="Database1Model.FK__ProductMa__RefSu__6383C8BA">
+            <End Role="SubCategoryMaster" EntitySet="SubCategoryMasters" />
+            <End Role="ProductMaster" EntitySet="ProductMasters" />
+          </AssociationSet>
+          <EntitySet Name="UserMasters" EntityType="Database1Model.UserMaster" />
+          <AssociationSet Name="FK__UserMaste__refCi__17F790F9" Association="Database1Model.FK__UserMaste__refCi__17F790F9">
+            <End Role="CityMaster" EntitySet="CityMasters" />
+            <End Role="UserMaster" EntitySet="UserMasters" />
+          </AssociationSet>
+          <EntitySet Name="CartMasters" EntityType="Database1Model.CartMaster" />
+          <AssociationSet Name="FK__CartMaste__refPr__03F0984C" Association="Database1Model.FK__CartMaste__refPr__03F0984C">
+            <End Role="ProductMaster" EntitySet="ProductMasters" />
+            <End Role="CartMaster" EntitySet="CartMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CartMaste__refUs__18EBB532" Association="Database1Model.FK__CartMaste__refUs__18EBB532">
+            <End Role="UserMaster" EntitySet="UserMasters" />
+            <End Role="CartMaster" EntitySet="CartMasters" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="CategoryMaster">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SubCategoryMasters" Relationship="Database1Model.FK__SubCatego__RefCa__60A75C0F" FromRole="CategoryMaster" ToRole="SubCategoryMaster" />
+        </EntityType>
+        <EntityType Name="CityMaster">
+          <Key>
+            <PropertyRef Name="CityId" />
+          </Key>
+          <Property Name="CityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CityName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="RefStateId" Type="Int32" />
+          <NavigationProperty Name="StateMaster" Relationship="Database1Model.FK__CityMaste__RefSt__6E01572D" FromRole="CityMaster" ToRole="StateMaster" />
+          <NavigationProperty Name="UserMasters" Relationship="Database1Model.FK__UserMaste__refCi__17F790F9" FromRole="CityMaster" ToRole="UserMaster" />
+        </EntityType>
+        <EntityType Name="CountryMaster">
+          <Key>
+            <PropertyRef Name="CountryId" />
+          </Key>
+          <Property Name="CountryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="StateMasters" Relationship="Database1Model.FK__StateMast__RefCo__6A30C649" FromRole="CountryMaster" ToRole="StateMaster" />
+        </EntityType>
+        <EntityType Name="ProductMaster">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="RefSubCategoryId" Type="Int32" />
+          <Property Name="price" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProductImage" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SubCategoryMaster" Relationship="Database1Model.FK__ProductMa__RefSu__6383C8BA" FromRole="ProductMaster" ToRole="SubCategoryMaster" />
+          <NavigationProperty Name="CartMasters" Relationship="Database1Model.FK__CartMaste__refPr__03F0984C" FromRole="ProductMaster" ToRole="CartMaster" />
+        </EntityType>
+        <EntityType Name="StateMaster">
+          <Key>
+            <PropertyRef Name="StateId" />
+          </Key>
+          <Property Name="StateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StateName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="RefCountryId" Type="Int32" />
+          <NavigationProperty Name="CityMasters" Relationship="Database1Model.FK__CityMaste__RefSt__6E01572D" FromRole="StateMaster" ToRole="CityMaster" />
+          <NavigationProperty Name="CountryMaster" Relationship="Database1Model.FK__StateMast__RefCo__6A30C649" FromRole="StateMaster" ToRole="CountryMaster" />
+        </EntityType>
+        <EntityType Name="SubCategoryMaster">
+          <Key>
+            <PropertyRef Name="SubCategoryId" />
+          </Key>
+          <Property Name="SubCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubCategoryName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="RefCategoryId" Type="Int32" />
+          <NavigationProperty Name="CategoryMaster" Relationship="Database1Model.FK__SubCatego__RefCa__60A75C0F" FromRole="SubCategoryMaster" ToRole="CategoryMaster" />
+          <NavigationProperty Name="ProductMasters" Relationship="Database1Model.FK__ProductMa__RefSu__6383C8BA" FromRole="SubCategoryMaster" ToRole="ProductMaster" />
+        </EntityType>
+        <Association Name="FK__SubCatego__RefCa__60A75C0F">
+          <End Type="Database1Model.CategoryMaster" Role="CategoryMaster" Multiplicity="0..1" />
+          <End Type="Database1Model.SubCategoryMaster" Role="SubCategoryMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoryMaster">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="SubCategoryMaster">
+              <PropertyRef Name="RefCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CityMaste__RefSt__6E01572D">
+          <End Type="Database1Model.StateMaster" Role="StateMaster" Multiplicity="0..1" />
+          <End Type="Database1Model.CityMaster" Role="CityMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StateMaster">
+              <PropertyRef Name="StateId" />
+            </Principal>
+            <Dependent Role="CityMaster">
+              <PropertyRef Name="RefStateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StateMast__RefCo__6A30C649">
+          <End Type="Database1Model.CountryMaster" Role="CountryMaster" Multiplicity="0..1" />
+          <End Type="Database1Model.StateMaster" Role="StateMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CountryMaster">
+              <PropertyRef Name="CountryId" />
+            </Principal>
+            <Dependent Role="StateMaster">
+              <PropertyRef Name="RefCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductMa__RefSu__6383C8BA">
+          <End Type="Database1Model.SubCategoryMaster" Role="SubCategoryMaster" Multiplicity="0..1" />
+          <End Type="Database1Model.ProductMaster" Role="ProductMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubCategoryMaster">
+              <PropertyRef Name="SubCategoryId" />
+            </Principal>
+            <Dependent Role="ProductMaster">
+              <PropertyRef Name="RefSubCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserMaster">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userFirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserMiddleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserLastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserPassword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserImageUrl" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UserAdd" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UserEmailId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UserGender" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="refCityId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CityMaster" Relationship="Database1Model.FK__UserMaste__refCi__17F790F9" FromRole="UserMaster" ToRole="CityMaster" />
+          <NavigationProperty Name="CartMasters" Relationship="Database1Model.FK__CartMaste__refUs__18EBB532" FromRole="UserMaster" ToRole="CartMaster" />
+        </EntityType>
+        <Association Name="FK__UserMaste__refCi__17F790F9">
+          <End Type="Database1Model.CityMaster" Role="CityMaster" Multiplicity="1" />
+          <End Type="Database1Model.UserMaster" Role="UserMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CityMaster">
+              <PropertyRef Name="CityId" />
+            </Principal>
+            <Dependent Role="UserMaster">
+              <PropertyRef Name="refCityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CartMaster">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="refAdminId" Type="Int32" Nullable="false" />
+          <Property Name="refProductId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="refUserId" Type="Int32" Nullable="false" />
+          <Property Name="OrderProcessed" Type="Boolean" />
+          <NavigationProperty Name="ProductMaster" Relationship="Database1Model.FK__CartMaste__refPr__03F0984C" FromRole="CartMaster" ToRole="ProductMaster" />
+          <NavigationProperty Name="UserMaster" Relationship="Database1Model.FK__CartMaste__refUs__18EBB532" FromRole="CartMaster" ToRole="UserMaster" />
+        </EntityType>
+        <Association Name="FK__CartMaste__refPr__03F0984C">
+          <End Type="Database1Model.ProductMaster" Role="ProductMaster" Multiplicity="1" />
+          <End Type="Database1Model.CartMaster" Role="CartMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductMaster">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="CartMaster">
+              <PropertyRef Name="refProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CartMaste__refUs__18EBB532">
+          <End Type="Database1Model.UserMaster" Role="UserMaster" Multiplicity="1" />
+          <End Type="Database1Model.CartMaster" Role="CartMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserMaster">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="CartMaster">
+              <PropertyRef Name="refUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Database1ModelStoreContainer" CdmEntityContainer="Database1Entities1">
+          <EntitySetMapping Name="MastersLogins">
+            <EntityTypeMapping TypeName="Database1Model.MastersLogin">
+              <MappingFragment StoreEntitySet="MastersLogin">
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="AdminName" ColumnName="AdminName" />
+                <ScalarProperty Name="AdminEmailId" ColumnName="AdminEmailId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CategoryMasters">
+            <EntityTypeMapping TypeName="Database1Model.CategoryMaster">
+              <MappingFragment StoreEntitySet="CategoryMaster">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CityMasters">
+            <EntityTypeMapping TypeName="Database1Model.CityMaster">
+              <MappingFragment StoreEntitySet="CityMaster">
+                <ScalarProperty Name="RefStateId" ColumnName="RefStateId" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CountryMasters">
+            <EntityTypeMapping TypeName="Database1Model.CountryMaster">
+              <MappingFragment StoreEntitySet="CountryMaster">
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductMasters">
+            <EntityTypeMapping TypeName="Database1Model.ProductMaster">
+              <MappingFragment StoreEntitySet="ProductMaster">
+                <ScalarProperty Name="ProductImage" ColumnName="ProductImage" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="RefSubCategoryId" ColumnName="RefSubCategoryId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StateMasters">
+            <EntityTypeMapping TypeName="Database1Model.StateMaster">
+              <MappingFragment StoreEntitySet="StateMaster">
+                <ScalarProperty Name="RefCountryId" ColumnName="RefCountryId" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateId" ColumnName="StateId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubCategoryMasters">
+            <EntityTypeMapping TypeName="Database1Model.SubCategoryMaster">
+              <MappingFragment StoreEntitySet="SubCategoryMaster">
+                <ScalarProperty Name="RefCategoryId" ColumnName="RefCategoryId" />
+                <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
+                <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserMasters">
+            <EntityTypeMapping TypeName="Database1Model.UserMaster">
+              <MappingFragment StoreEntitySet="UserMaster">
+                <ScalarProperty Name="refCityId" ColumnName="refCityId" />
+                <ScalarProperty Name="UserGender" ColumnName="UserGender" />
+                <ScalarProperty Name="UserEmailId" ColumnName="UserEmailId" />
+                <ScalarProperty Name="UserAdd" ColumnName="UserAdd" />
+                <ScalarProperty Name="UserImageUrl" ColumnName="UserImageUrl" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserLastName" ColumnName="UserLastName" />
+                <ScalarProperty Name="UserMiddleName" ColumnName="UserMiddleName" />
+                <ScalarProperty Name="userFirstName" ColumnName="userFirstName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CartMasters">
+            <EntityTypeMapping TypeName="Database1Model.CartMaster">
+              <MappingFragment StoreEntitySet="CartMaster">
+                <ScalarProperty Name="OrderProcessed" ColumnName="OrderProcessed" />
+                <ScalarProperty Name="refUserId" ColumnName="refUserId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="refProductId" ColumnName="refProductId" />
+                <ScalarProperty Name="refAdminId" ColumnName="refAdminId" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
